@@ -1,12 +1,14 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "sherlockresearch",
+  "main": "src/index.js",
   "compatibility_date": "2026-05-24",
   "observability": {
     "enabled": true
   },
   "assets": {
-    "directory": "sherlock-research"
+    "directory": "sherlock-research",
+    "binding": "ASSETS"
   },
   "compatibility_flags": [
     "nodejs_compat"

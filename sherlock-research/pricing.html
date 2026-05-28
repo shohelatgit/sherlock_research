@@ -471,10 +471,10 @@
 
 <script>
   var plans = {
-    single:    { name: "Standard Report",       price: "$497",  unit: "",     note: "One-time · national data",            detail: "Full national industry report and forecasts (PDF)", cta: "Get Standard Report" },
-    city:      { name: "City-Specific Report",   price: "$597",  unit: "",     note: "One-time · this industry + your metro", detail: "National report + local data cut for a metro of your choice", cta: "Get City-Specific Report" },
-    quarterly: { name: "Quarterly + Coaching",   price: "$2,000",unit: "/yr",  note: "Billed annually · updates + 1:1 calls", detail: "Pick one industry · 4 quarterly updates + 4 coaching calls",  cta: "Start Quarterly Plan" },
-    all:       { name: "All-Access Pass",        price: "$2,997",unit: "",     note: "One-time · every industry report",     detail: "Every Sherlock industry report — current and new releases", cta: "Get All-Access Pass" }
+    single:    { name: "Standard Report",       price: "$497",  unit: "",     note: "One-time · national data",              detail: "Full national industry report and forecasts (PDF)",            cta: "Get Standard Report",      priceId: "price_1Tc7DI4dY2cB0BahhgeUWFeY" },
+    city:      { name: "City-Specific Report",   price: "$597",  unit: "",     note: "One-time · this industry + your metro", detail: "National report + local data cut for a metro of your choice", cta: "Get City-Specific Report", priceId: "price_1Tc7F34dY2cB0BahsUGtj3zt" },
+    quarterly: { name: "Quarterly + Coaching",   price: "$2,000",unit: "/yr",  note: "Billed annually · updates + 1:1 calls", detail: "Pick one industry · 4 quarterly updates + 4 coaching calls",  cta: "Start Quarterly Plan",     priceId: "price_1Tc7GI4dY2cB0BahWV1Zf3L2" },
+    all:       { name: "All-Access Pass",        price: "$2,997",unit: "",     note: "One-time · every industry report",      detail: "Every Sherlock industry report — current and new releases",   cta: "Get All-Access Pass",      priceId: "price_1Tc7Hw4dY2cB0Bahrl1uK5Uo" }
   };
   var current = "city";
 
@@ -493,6 +493,43 @@
   document.querySelectorAll('.opt-card').forEach(function(card){
     card.addEventListener('click', function(){ applyPlan(card.getAttribute('data-plan')); });
   });
+
+  document.getElementById('checkoutCta').addEventListener('click', async function(e) {
+    e.preventDefault();
+    var btn = this;
+    var originalText = btn.textContent;
+    btn.textContent = 'Redirecting…';
+    btn.style.opacity = '0.7';
+    btn.style.pointerEvents = 'none';
+
+    try {
+      var res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priceId: plans[current].priceId }),
+      });
+      var data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.error || 'Unknown error');
+      }
+    } catch (err) {
+      alert('Something went wrong. Please try again or email hello@sherlockresearch.com.');
+      btn.textContent = originalText;
+      btn.style.opacity = '';
+      btn.style.pointerEvents = '';
+    }
+  });
+
+  // Show success / cancelled message from Stripe redirect
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('checkout') === 'success') {
+    var banner = document.createElement('div');
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#5C7F5A;color:#fff;text-align:center;padding:14px 20px;font-weight:600;z-index:999;font-size:15px;';
+    banner.textContent = '✓ Payment successful — check your email for your report.';
+    document.body.prepend(banner);
+  }
 
   applyPlan('city');
 </script>
