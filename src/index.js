@@ -105,10 +105,9 @@ async function verifyStripeSignature(payload, sigHeader, secret) {
 // ── Send report email via Resend ──────────────────────────────────────────────
 
 async function sendReportEmail(toEmail, env) {
-  // Fetch the PDF from static assets and base64-encode it
-  const pdfRes = await fetch('https://sherlockresearch.sherlockresearchpricing.workers.dev/reports/landscaping-report.pdf');
+  const pdfRes = await env.ASSETS.fetch('https://placeholder/reports/landscaping-report.pdf');
   const pdfBuffer = await pdfRes.arrayBuffer();
-  const pdfBase64 = arrayBufferToBase64(pdfBuffer);
+  const pdfBase64 = Buffer.from(pdfBuffer).toString('base64');
 
   const emailBody = {
     from: 'Sherlock Research <onboarding@resend.dev>',
@@ -158,15 +157,6 @@ async function sendReportEmail(toEmail, env) {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function arrayBufferToBase64(buffer) {
-  const bytes = new Uint8Array(buffer);
-  const chunkSize = 8192;
-  let binary = '';
-  for (let i = 0; i < bytes.length; i += chunkSize) {
-    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
-  }
-  return btoa(binary);
-}
 
 function jsonError(message, status) {
   return new Response(JSON.stringify({ error: message }), {
