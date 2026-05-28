@@ -111,7 +111,7 @@ async function sendReportEmail(toEmail, env) {
   const pdfBase64 = arrayBufferToBase64(pdfBuffer);
 
   const emailBody = {
-    from: 'Sherlock Research <reports@sherlockresearch.com>',
+    from: 'Sherlock Research <onboarding@resend.dev>',
     to: [toEmail],
     subject: 'Your Sherlock Research Report is here',
     html: `
