@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "sherlockresearch",
+  "account_id": "b750824d7f77ea68f5630ba69e740894",
   "main": "src/index.js",
   "compatibility_date": "2026-05-24",
   "observability": {
