@@ -30,7 +30,7 @@ async function handleCheckout(request, env) {
   const { priceId } = body;
   if (!priceId || !ALLOWED_PRICE_IDS.has(priceId)) return jsonError('Invalid price ID', 400);
 
-  const origin = new URL(request.url).origin;
+  const origin = 'https://sherlockreports.com';
   const params = new URLSearchParams({
     'line_items[0][price]': priceId,
     'line_items[0][quantity]': '1',
@@ -110,7 +110,7 @@ async function sendReportEmail(toEmail, env) {
   const pdfBase64 = Buffer.from(pdfBuffer).toString('base64');
 
   const emailBody = {
-    from: 'Sherlock Research <onboarding@resend.dev>',
+    from: 'Sherlock Research <reports@sherlockreports.com>',
     to: [toEmail],
     subject: 'Your Sherlock Research Report is here',
     html: `

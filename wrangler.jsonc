@@ -12,5 +12,9 @@
   },
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+  "routes": [
+    { "pattern": "sherlockreports.com/*", "zone_name": "sherlockreports.com" },
+    { "pattern": "www.sherlockreports.com/*", "zone_name": "sherlockreports.com" }
   ]
 }
